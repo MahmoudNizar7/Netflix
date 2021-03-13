@@ -22,8 +22,13 @@
 
         public function index(Request $request)
         {
-            $movies = Movie::whenSearch($request->search)->paginate(5);
-            return view('dashboard.movies.index', compact('movies'));
+            $categories = Category::all();
+            $movies = Movie::whenSearch(request()->search)
+                ->whenCategory(request()->category)
+                ->with('categories')
+                ->paginate(5);
+            return $movies;
+            return view('dashboard.movies.index', compact('movies','categories'));
         }
 
         public function create()
@@ -115,6 +120,27 @@
             return redirect()->route('dashboard.movies.index');
         }
 
+        private function remove_previous($image_type, $movie)
+        {
+            if ($image_type == 'poster') {
+
+                if ($movie->poster != null) {
+
+                    Storage::disk('local')->delete('public/images/' . $movie->poster);
+
+                }
+
+            } else {
+
+                if ($movie->image != null) {
+
+                    Storage::disk('local')->delete('public/images/' . $movie->image);
+
+                }
+
+            }
+        }
+
         public function destroy(Movie $movie)
         {
             Storage::disk('local')->delete('public/images/' . $movie->poster);
@@ -130,26 +156,5 @@
         public function show(Movie $movie)
         {
             return $movie;
-        }
-
-        private function remove_previous($image_type, $movie)
-        {
-            if ($image_type == 'poster') {
-
-                if ($movie->poster != null) {
-
-                    Storage::disk('local')->delete('public/images/' . $movie->poster);
-
-                }
-
-            } else {
-
-                if ($movie->image != null){
-
-                    Storage::disk('local')->delete('public/images/' . $movie->image);
-
-                }
-
-            }
         }
     }

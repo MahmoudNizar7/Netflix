@@ -24,6 +24,18 @@
                         </div>
 
                         <div class="col-md-4">
+                            <div class="form-group">
+                                <select name="category" class="form-control">
+                                    <option value="">All Categories</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ request()->category == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
 
                             @if(auth()->user()->hasPermission('movies_create'))
@@ -32,6 +44,7 @@
                                 <a href="#" disabled class="btn btn-primary"><i class="fa fa-plus"> Add</i></a>
                             @endif
                         </div>
+
 
                     </div>
                 </form>
@@ -48,6 +61,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Description</th>
+                            <th>Categories</th>
                             <th>Year</th>
                             <th>Rating</th>
                             <th>Action</th>
@@ -59,6 +73,11 @@
                                 <td>{{ $index+1 }}</td>
                                 <td>{{ $movie->name }}</td>
                                 <td>{{ Str::limit($movie->description, 50) }}</td>
+                                <td>
+                                    @foreach($movie->categories as $category)
+                                        <h5 style="display: inline-block"><span class="badge badge-primary">{{ $category->name }}</span></h5>
+                                    @endforeach
+                                </td>
                                 <td>{{ $movie->year }}</td>
                                 <td>{{ $movie->rating }}</td>
                                 <td>

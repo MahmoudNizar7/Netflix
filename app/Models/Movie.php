@@ -41,4 +41,18 @@
                     ->orWhere('rating', 'like', "%$search%");
             });
         }
+
+        public function scopeWhenCategory($query, $category)
+        {
+            return $query->when($category, function ($q) use ($category) {
+
+                return $q->whereHas('categories', function ($qu) use ($category) {
+
+                    return $qu->whereIn('category_id', (array)$category)
+                        ->orWhere('name', (array)$category);
+
+                });
+
+            });
+        }
     }
