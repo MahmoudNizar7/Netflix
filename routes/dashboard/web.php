@@ -6,7 +6,7 @@
     use App\Http\Controllers\Dashboard\SettingController;
     use App\Http\Controllers\Dashboard\UserController;
     use App\Http\Controllers\Dashboard\WelcomeController;
-    use App\Http\Controllers\Daxhboard\MovieController;
+    use App\Http\Controllers\Dashboard\MovieController;
     use Illuminate\Support\Facades\Route;
 
     Route::prefix('dashboard')->name('dashboard.')->middleware(['auth', 'role:super_admin|admin'])->group(function () {

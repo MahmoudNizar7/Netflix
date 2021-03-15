@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\Http\Controllers\Daxhboard;
+    namespace App\Http\Controllers\Dashboard;
 
     use App\Http\Controllers\Controller;
     use App\Jobs\StreamMovie;
@@ -27,8 +27,8 @@
                 ->whenCategory(request()->category)
                 ->with('categories')
                 ->paginate(5);
-            return $movies;
-            return view('dashboard.movies.index', compact('movies','categories'));
+
+            return view('dashboard.movies.index', compact('movies', 'categories'));
         }
 
         public function create()

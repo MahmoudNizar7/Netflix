@@ -3,11 +3,17 @@
     namespace App\Http\Controllers\Dashboard;
 
     use App\Http\Controllers\Controller;
+    use App\Models\Category;
+    use App\Models\Movie;
+    use App\Models\User;
 
     class WelcomeController extends Controller
     {
         public function index()
         {
-            return view('dashboard.welcome');
+            $users_count = User::whereRole('user')->count();
+            $movies_count = Movie::where('percent', 100)->count();
+            $categories_count = Category::count();
+            return view('dashboard.welcome', compact('users_count', 'movies_count', 'categories_count'));
         }
     }
