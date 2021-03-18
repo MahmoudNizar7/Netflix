@@ -6,6 +6,11 @@
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Support\Facades\Storage;
 
+
+    /**
+     * @method static whenSearch($search)
+     * @method static whenCategory($category)
+     */
     class Movie extends Model
     {
         use HasFactory;

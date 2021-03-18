@@ -20,8 +20,44 @@
             </form><!-- end of form -->
 
             <ul class="navbar-nav ml-auto">
-                <a href="login.html" class="btn btn-primary mb-2 mb-md-0 mr-0 mr-md-2">Login</a>
-                <a href="register.html.html" class="btn btn-outline-light">Register</a>
+
+                @auth
+                    <li class="nav-item mr-2">
+                        <a href="" class="nav-link text-white" style="position: relative;">
+                            <i class="fa fa-heart"></i>
+                            <span class="bg-primary text-white d-flex justify-content-center align-items-center"
+                                  style="position: absolute; top: 0;right: -15px; width: 30px; height: 20px; border-radius: 50px">
+                                9+
+                            </span>
+                        </a>
+                    </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        {{ auth()->user()->name }}
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        @if(auth()->user()->hasRole("super_admin") || auth()->user()->hasRole("admin"))
+                            <a href="{{ route('dashboard.welcome') }}" class="dropdown-item">
+                                <i class="fa fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        @endif
+
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item">
+                            <i class="fa fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
+                </li>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary mb-2 mb-md-0 mr-0 mr-md-2">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline-light">Register</a>
+                @endauth
             </ul>
 
         </div><!-- end of collapse -->
