@@ -5,7 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>Netflix</title>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!--font awesome-->
     <link rel="stylesheet" href="{{ asset('css/font-awesome5.11.2.min.css') }}">
@@ -23,6 +26,27 @@
 
     <!--main styles -->
     <link rel="stylesheet" href="{{ asset('css/main.min.css') }}">
+
+    {{--easy auto complete--}}
+    <link rel="stylesheet" href="{{ asset('plugins/easyautocomplete/easy-autocomplete.min.css') }}">
+
+    <style>
+        .fw-900 {
+            font-weight: 900;
+        }
+
+        .easy-autocomplete {
+            width: 90%;
+        }
+
+        .easy-autocomplete input{
+            color: white !important;
+        }
+
+        .eac-icon-left .eac-item img {
+            max-height: 80px !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -41,7 +65,47 @@
 <!--main scripts-->
 <script src="{{ asset('js/main.min.js') }}"></script>
 
+{{--easy auto complete--}}
+<script src="{{ asset('plugins/easyautocomplete/jquery.easy-autocomplete.min.js') }}"></script>
+
+{{--player js--}}
+<script src="{{ asset('js/playerjs.js') }}"></script>
+<script src="{{ asset('js/custom/movie.js') }}"></script>
+
 <script>
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var options = {
+        url: function (search) {
+            return "/movies?search" + search;
+        },
+
+        getValue: "name",
+
+        template: {
+            type: 'iconLeft',
+            fields: {
+                iconSrc: "poster_path"
+            }
+        },
+
+        list: {
+            onChooseEvent: function () {
+                var movie = $('.form-control[type="search"]').getSelectedItemData();
+                var url = window.location.origin + '/movies/' + movie.id;
+                window.location.replace(url);
+            }
+
+        }
+    }
+
+    $('.form-control[type="search"]').easyAutocomplete(options)
+
     $(document).ready(function () {
 
         $("#banner .movies").owlCarousel({
@@ -76,5 +140,8 @@
 
     });
 </script>
+
+@stack('scripts')
+
 </body>
 </html>

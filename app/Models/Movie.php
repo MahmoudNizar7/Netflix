@@ -10,6 +10,7 @@
     /**
      * @method static whenSearch($search)
      * @method static whenCategory($category)
+     * @method static whenFavorite($favorite)
      */
     class Movie extends Model
     {
@@ -17,7 +18,7 @@
 
         protected $fillable = ['name', 'description', 'path', 'rating', 'year', 'poster', 'image', 'percent'];
 
-        protected $appends = ['poster_path', 'image_path'];
+        protected $appends = ['poster_path', 'image_path', 'is_favored'];
 
         // attributes-----------------------------------------------------------------
         public function getPosterPathAttribute(): string
@@ -30,13 +31,31 @@
             return Storage::url('images/' . $this->image);
         }
 
+        public function getIsFavoredAttribute()
+        {
+            if (auth()->user()) {
+
+                return $this->users()->where('user_id', auth()->user()->id)->count();
+
+            }
+
+            return false;
+        }
+
         // relations------------------------------------------------------------------
+
+        public function users()
+        {
+            return $this->belongsToMany(User::class, 'user_movie');
+        }
+
         public function categories()
         {
             return $this->belongsToMany(Category::class, 'movie_category');
         }
 
         // scopes---------------------------------------------------------------------
+
         public function scopeWhenSearch($query, $search)
         {
             return $query->when($search, function ($q) use ($search) {
@@ -59,5 +78,20 @@
                 });
 
             });
+        }
+
+        public function scopeWhenFavorite($query, $favorite)
+        {
+
+            return $query->when($favorite, function ($q) {
+
+                return $q->whereHas('users', function ($qu) {
+
+                    return $qu->where('user_id', auth()->user()->id);
+
+                });
+
+            });
+
         }
     }

@@ -37,10 +37,20 @@
                                 <p class="movie__description my-2">{{ $movie->description }}</p>
 
                                 <div class="movie__cta my-4">
-                                    <a href="show.html" class="btn btn-primary text-capitalize mr-0 mr-md-2"><span
-                                            class="fas fa-play"></span> watch now</a>
-                                    <a href="#" class="btn btn-outline-light text-capitalize"><span class="fas fa-heart"></span>
-                                        add to favorite</a>
+                                    <a href="{{ route('movies.show', $movie->id) }}" class="btn btn-primary text-capitalize mr-0 mr-md-2"><span class="fas fa-play"></span> watch now</a>
+
+                                    @auth
+                                        <a href="#" class="btn btn-outline-light text-capitalize movie__fav-btn">
+                                            <span class="far fa-heart movie__fav-icon {{ $movie->is_favored ? 'fw-900' : '' }} movie-{{ $movie->id }}"
+                                                  data-movie-id="{{ $movie->id }}" data-url="{{ route('movies.toggle_favorite', $movie->id) }}"
+                                            >
+                                            </span>
+                                            add to favorite
+                                        </a>
+                                    @else
+                                        <a href="{{ route('login') }}" class="btn btn-outline-light text-capitalize"><span class="far fa-heart"></span>add to favorite</a>
+                                    @endauth
+
                                 </div>
                             </div><!-- end of col -->
 
@@ -68,7 +78,7 @@
                 <div class="row my-4">
                     <div class="col-12 d-flex justify-content-between">
                         <h3 class="listing__title text-white fw-300">{{ $category->name }}</h3>
-                        <a href="" class="align-self-center text-capitalize text-primary">see all</a>
+                        <a href="{{ route('movies.index', ['category_name' => $category->name]) }}" class="align-self-center text-capitalize text-primary">see all</a>
                     </div>
                 </div><!-- end of row -->
 
@@ -104,9 +114,18 @@
                                 </div>
 
                                 <div class="d-flex movie__cta">
-                                    <a href="" class="btn btn-primary text-capitalize flex-fill mr-2"><i class="fas fa-play"></i>
-                                        watch now</a>
-                                    <i class="far fa-heart fa-1x align-self-center movie__fav-button"></i>
+                                    <a href="{{ route('movies.show', $movie->id) }}" class="btn btn-primary text-capitalize flex-fill mr-2"><i class="fas fa-play"></i>watch now</a>
+
+                                    @auth
+                                        <i class="far fa-heart {{ $movie->is_favored ? 'fw-900' : '' }} fa-1x align-self-center movie__fav-icon movie-{{ $movie->id }}"
+                                           data-movie-id="{{ $movie->id }}" data-url="{{ route('movies.toggle_favorite', $movie->id) }}" style="cursor: pointer"
+                                        >
+
+                                        </i>
+                                    @else
+                                        <a href="{{ route('login') }}" class="text-white align-self-center"><i class="far fa-heart fa-1x align-self-center movie__fav-icon" style="cursor: pointer"></i></a>
+                                    @endauth
+
                                 </div>
 
                             </div><!-- end of movie details -->

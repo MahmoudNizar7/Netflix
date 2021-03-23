@@ -21,6 +21,4 @@
         Route::get('/settings/social_links', [SettingController::class, 'social_links'])->name('settings.social_links');
         Route::post('/settings', [SettingController::class, 'store'])->name('settings.store');
 
-        Route::get('/login/{provider}/redirect', [LoginController::class, 'redirectToProvider'])->where('provider', 'facebook|google');
-        Route::get('/login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->where('provider', 'facebook|google');
     });

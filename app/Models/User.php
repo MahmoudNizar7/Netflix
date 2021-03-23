@@ -23,6 +23,8 @@
             'password',
         ];
 
+        protected $withCount = ['movies'];
+
         /**
          * The attributes that should be hidden for arrays.
          *
@@ -77,6 +79,12 @@
         public function getNameAttribute($value)
         {
             return ucfirst(str_replace('_', ' ', $value));
+        }
+
+        // relation -------------------------------------------------------------
+        public function movies()
+        {
+            return $this->belongsToMany(Movie::class, 'user_movie');
         }
 
 

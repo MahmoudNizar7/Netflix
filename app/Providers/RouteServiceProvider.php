@@ -17,7 +17,7 @@
          *
          * @var string
          */
-        public const HOME = '/home';
+        public const HOME = '/';
 
         /**
          * The controller namespace for the application.
